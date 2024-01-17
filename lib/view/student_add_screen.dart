@@ -83,11 +83,16 @@ class StudentAddScreen extends StatelessWidget {
                   child: TextFormField(
                     controller: databaseController.emailCntrl,
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if(databaseController.emailRegex.hasMatch(value!)){
+                        if (value.isEmpty) {
                         return "Please fill";
                       } else {
                         return null;
                       }
+                      }else{
+                        return "enter valid email";
+                      }
+                      
                     },
                     decoration: InputDecoration(
                         hintText: "Email",
@@ -150,7 +155,8 @@ class StudentAddScreen extends StatelessWidget {
                 minSize: 0,
                 padding: EdgeInsets.zero,
                 onPressed: () {
-                    if(databaseController.fkey.value.currentState!.validate()){
+                  if(databaseController.validateImage()){
+                   if(databaseController.fkey.value.currentState!.validate()){
                     databaseController.addStudent(Student(
                       name: databaseController.nameCntrl.text,
                       dateOfBirth: databaseController.dob.value,
@@ -160,6 +166,15 @@ class StudentAddScreen extends StatelessWidget {
                       
                       ));
                       Get.back();
+                  }
+                   
+                  }
+                  else{
+                    Get.snackbar(
+                      
+                      "", "Please add a image!!",
+                      backgroundColor: Colors.red[200]
+                      );
                   }
                 },
                 child: Container(

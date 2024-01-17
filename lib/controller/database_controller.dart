@@ -12,6 +12,7 @@ class DatabaseController extends GetxController {
   var dob=DateFormat('dd/MM/yyyy').format(DateTime.now()).obs;
   var student=Student(name: "", dateOfBirth: "", email: "",address: "",imagePath: "").obs;
   var imgPath="".obs;
+  RegExp emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
   
 
   var nameCntrl = TextEditingController();
@@ -74,6 +75,7 @@ void delete(){
     nameCntrl.clear();
     emailCntrl.clear();
     addressCntrl.clear();
+    dob.value=DateFormat("dd/MM/yyyy").format(DateTime.now());
     image.value=null;
     picked.value=null;
     super.dispose();
@@ -114,7 +116,7 @@ void delete(){
 
 
 
-   void editStudent(int index, {String? newName, String? newEmail, String? newAddress}) async {
+   void editStudent(int index, {String? newName, String? newEmail, String? newAddress,String? newImgPath}) async {
     var box = Hive.box<Student>('students');
 
     // Ensure that the index is within the bounds of the box
@@ -133,6 +135,10 @@ void delete(){
       if (newAddress != null) {
         studentToEdit.address = newAddress;
       }
+
+      if(image.value!=null){
+        studentToEdit.imagePath=newImgPath;
+      }
       
 
       // Save the changes back to Hive
@@ -142,6 +148,14 @@ void delete(){
       loadData();
       toggleEditing();
     }
+  }
+
+
+ bool validateImage(){
+    if(image.value==null){
+      return false;
+    }
+    return true;
   }
 
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:studentdatabase/controller/database_controller.dart';
 
 class StudentPage extends StatelessWidget {
@@ -23,6 +24,7 @@ class StudentPage extends StatelessWidget {
 
     return Obx(
       () => Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.teal[200],
           actions: [
@@ -108,6 +110,24 @@ class StudentPage extends StatelessWidget {
                   const SizedBox(
                     height: 25,
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                          height: 150,
+                          width: 150,
+                          child: Image.file(
+                            File(databaseController.student.value.imagePath!),
+                            fit: BoxFit.fill,
+                          )),
+                      IconButton(
+                          onPressed: () {
+                            _showBottomSheet(databaseController,);
+                          },
+                          icon: const Icon(Icons.edit))
+                    ],
+                  ),
                   const SizedBox(
                     height: 25,
                   ),
@@ -184,7 +204,8 @@ class StudentPage extends StatelessWidget {
                       databaseController.editStudent(index,
                           newName: name.text,
                           newAddress: address.text,
-                          newEmail: email.text);
+                          newEmail: email.text,
+                          newImgPath: databaseController.imgPath.value);
                       Get.back();
                     },
                     child: Container(
@@ -209,3 +230,30 @@ class StudentPage extends StatelessWidget {
   }
 }
 
+_showBottomSheet(DatabaseController databaseController) {
+  Get.bottomSheet(Container(
+    height: 250,
+    width: double.infinity,
+    color: Colors.white,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        const Text("Add image from"),
+        ElevatedButton(
+            onPressed: () {
+              databaseController.pickImage(ImageSource.camera);
+              // databaseController.student.value.imagePath=databaseController.image.value!.path;
+              Get.back();
+            },
+            child: const Text("Camera")),
+        ElevatedButton(
+            onPressed: () {
+              databaseController.pickImage(ImageSource.gallery);
+              // databaseController.student.value.imagePath=databaseController.imgPath.value;
+              Get.back();
+            },
+            child: const Text("Gallery")),
+      ],
+    ),
+  ));
+}
