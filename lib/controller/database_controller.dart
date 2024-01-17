@@ -16,7 +16,7 @@ class DatabaseController extends GetxController {
 
   var nameCntrl = TextEditingController();
   var emailCntrl = TextEditingController();
-  var dateOfBirthCntrl = TextEditingController();
+  
   var searchCntrl = TextEditingController();
   var addressCntrl=TextEditingController();
   
@@ -73,7 +73,9 @@ void delete(){
   void dispose() {
     nameCntrl.clear();
     emailCntrl.clear();
-    dateOfBirthCntrl.clear();
+    addressCntrl.clear();
+    image.value=null;
+    picked.value=null;
     super.dispose();
   }
 

@@ -78,7 +78,8 @@ class StudentDisplayScreen extends StatelessWidget {
                   trailing: GestureDetector(
                     onTap: () {
                       // databaseController.deleteStudent(index);
-                      showAlertBox(databaseController,index);
+                      // showAlertBox(databaseController,index);
+                     _showBottomSheet(databaseController, index);
                     },
                     child: const Icon(Icons.delete,color: Colors.red,)),
                 ),
@@ -117,20 +118,26 @@ class StudentDisplayScreen extends StatelessWidget {
 }
 
 
-showAlertBox(DatabaseController databaseController,int index){
+_showBottomSheet(DatabaseController databaseController,int index){
+  Get.bottomSheet(
+    
+    Container(
+      color: Colors.white,
+      height: 200,
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
 
-  Get.defaultDialog(
-    title: "Alert",
-    content:const Text("Are you sure?"),
-    actions: [
-      ElevatedButton(
+         const Text("Are you sure?"),
+           ElevatedButton(
         onPressed: () {
           databaseController.deleteStudent(index);
           
           Get.back();
           Get.snackbar("Alert", "Deleted successfully",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.red,
           colorText: Colors.white,
 
           );
@@ -143,6 +150,11 @@ showAlertBox(DatabaseController databaseController,int index){
           Get.back();
         },
          child:const Text("cancel")),
-    ]
+        ],
+      ),
+    )
   );
+  
 }
+
+
